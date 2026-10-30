@@ -58,6 +58,17 @@ Depois de gravar, confirma estas. Corrige se o Coolify deixar barra no fim ou a 
 | `DOCKER_REGISTRY_USERNAME` | `registry-user` |
 | `TRIGGER_IMAGE_TAG` | `v4.5.0` |
 | `NODE_MAX_OLD_SPACE_SIZE` | `4800` com 6 GB para o webapp; `6400` com 8 GB |
+
+Limites de staging, já no compose (substituem os defaults da imagem: payload 3 MB, batch 1 MB, metadata 256 KB, concorrência de ambiente 100):
+
+| Variável | Valor |
+| --- | --- |
+| `TASK_PAYLOAD_MAXIMUM_SIZE` | 10 MB |
+| `BATCH_TASK_PAYLOAD_MAXIMUM_SIZE` | 10 MB |
+| `TASK_RUN_METADATA_MAXIMUM_SIZE` | 1 MB |
+| `DEFAULT_ORG_EXECUTION_CONCURRENCY_LIMIT` | `1000` (gravado na organização na criação) |
+| `DEFAULT_ENV_EXECUTION_CONCURRENCY_LIMIT` | `1000` |
+| `RUN_ENGINE_WORKER_CONCURRENCY_LIMIT` | `50` |
 | `EVENT_REPOSITORY_DEFAULT_STORE` | `clickhouse_v2` |
 | `OBJECT_STORE_ACCESS_KEY_ID` | `admin` |
 

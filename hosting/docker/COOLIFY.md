@@ -54,7 +54,7 @@ Depois de gravar, confirma estas. Corrige se o Coolify deixar barra no fim ou a 
 | `APP_ORIGIN` | `https://trigger4.<dominio>` |
 | `LOGIN_ORIGIN` | o mesmo |
 | `API_ORIGIN` | o mesmo |
-| `DOCKER_REGISTRY_URL` | `registry.trigger4.<dominio>` (sem `https://` e sem porta) |
+| `DOCKER_REGISTRY_URL` | `registry.trigger4.<dominio>` (sem `https://` e sem porta). Enquanto estiver vazio, o stack usa `registry:5000` |
 | `DOCKER_REGISTRY_USERNAME` | `registry-user` |
 | `TRIGGER_IMAGE_TAG` | `v4.5.0` |
 | `NODE_MAX_OLD_SPACE_SIZE` | `4800` com 6 GB para o webapp; `6400` com 8 GB |

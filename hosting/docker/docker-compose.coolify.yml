@@ -55,12 +55,12 @@ services:
     environment:
       NODE_ENV: production
       TRIGGER_TELEMETRY_DISABLED: ${TRIGGER_TELEMETRY_DISABLED:-1}
-      # Coolify fills SERVICE_URL_* at deploy time. Clearing it inside the
-      # container keeps the app on APP_ORIGIN (public 443, not :3000).
-      SERVICE_URL_WEBAPP_3000: ""
-      APP_ORIGIN: ${APP_ORIGIN:-${SERVICE_URL_WEBAPP_3000}}
-      LOGIN_ORIGIN: ${LOGIN_ORIGIN:-${SERVICE_URL_WEBAPP_3000}}
-      API_ORIGIN: ${API_ORIGIN:-${SERVICE_URL_WEBAPP_3000}}
+      # Set APP_ORIGIN, LOGIN_ORIGIN and API_ORIGIN in Coolify to the public
+      # URL (https://trigger4.<dominio>, no trailing slash, no :3000).
+      # An empty SERVICE_URL_* makes the webapp refuse to boot.
+      APP_ORIGIN: ${APP_ORIGIN:-http://localhost:8030}
+      LOGIN_ORIGIN: ${LOGIN_ORIGIN:-http://localhost:8030}
+      API_ORIGIN: ${API_ORIGIN:-http://localhost:8030}
       ELECTRIC_ORIGIN: http://electric:3000
       REALTIME_STREAMS_DEFAULT_VERSION: ${REALTIME_STREAMS_DEFAULT_VERSION:-v2}
       REALTIME_STREAMS_S2_BASIN: ${REALTIME_STREAMS_S2_BASIN:-trigger-realtime}
@@ -80,8 +80,10 @@ services:
       REDIS_PORT: "6379"
       REDIS_TLS_DISABLED: "true"
       APP_LOG_LEVEL: info
-      DEV_OTEL_EXPORTER_OTLP_ENDPOINT: ${APP_ORIGIN:-${SERVICE_URL_WEBAPP_3000}}/otel
-      DEPLOY_REGISTRY_HOST: ${DOCKER_REGISTRY_URL:-${SERVICE_FQDN_REGISTRY_5000}}
+      DEV_OTEL_EXPORTER_OTLP_ENDPOINT: ${APP_ORIGIN:-http://localhost:8030}/otel
+      # Public hostname once the registry domain exists. Until then the
+      # in-stack registry is reachable as registry:5000.
+      DEPLOY_REGISTRY_HOST: ${DOCKER_REGISTRY_URL:-registry:5000}
       DEPLOY_REGISTRY_NAMESPACE: ${DOCKER_REGISTRY_NAMESPACE:-trigger}
       OBJECT_STORE_BASE_URL: http://minio:9000
       OBJECT_STORE_ACCESS_KEY_ID: ${OBJECT_STORE_ACCESS_KEY_ID:-admin}
@@ -321,7 +323,7 @@ services:
       TRIGGER_DEQUEUE_INTERVAL_MS: "1000"
       DOCKER_HOST: tcp://docker-proxy:2375
       DOCKER_RUNNER_NETWORKS: webapp,supervisor
-      DOCKER_REGISTRY_URL: ${DOCKER_REGISTRY_URL:-${SERVICE_FQDN_REGISTRY_5000}}
+      DOCKER_REGISTRY_URL: ${DOCKER_REGISTRY_URL:-registry:5000}
       DOCKER_REGISTRY_USERNAME: ${DOCKER_REGISTRY_USERNAME:-registry-user}
       DOCKER_REGISTRY_PASSWORD: ${SERVICE_HEX_32_REGISTRY}
       DOCKER_AUTOREMOVE_EXITED_CONTAINERS: "0"
